@@ -27,10 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          <p><strong>Participants:</strong></p>
-          <ul>
-            ${details.participants.map(p => `<li>${p}</li>`).join('')}
-          </ul>
         `;
 
         // Add click handler to select activity
@@ -52,7 +48,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const activity = allActivities[activityName];
     const isRegistered = studentEmail && activity.participants.includes(studentEmail);
 
-    let actionsHTML = `<h4 style="color: #0066cc; margin-bottom: 20px;">${activityName}</h4>`;
+    let actionsHTML = `<h4 style="color: #0066cc; margin-bottom: 20px;">${activityName}</h4>
+      <p>${activity.description}</p>
+      <p><strong>Schedule:</strong> ${activity.schedule}</p>
+      <p><strong>Availability:</strong> ${activity.max_participants - activity.participants.length} spots left</p>
+      <p><strong>Capacity:</strong> ${activity.participants.length}/${activity.max_participants}</p>
+      <p><strong>Participants:</strong></p>
+      <ul>
+        ${activity.participants.length > 0 ? activity.participants.map(p => `<li>${p}</li>`).join('') : `<li>No participants yet</li>`}
+      </ul>`;
 
     if (!studentEmail) {
       actionsHTML += `
