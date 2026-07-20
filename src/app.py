@@ -82,6 +82,12 @@ activities = {
         "schedule": "Thursdays, 4:00 PM - 5:30 PM",
         "max_participants": 16,
         "participants": ["noah@mergington.edu"]
+    },
+    "Soccer": {
+        "description": "Competitive soccer practices and matches",
+        "schedule": "Mondays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 18,
+        "participants": ["lucas@mergington.edu", "aiden@mergington.edu"]
     }
 }
 
@@ -113,3 +119,22 @@ def signup_for_activity(activity_name: str, email: str):
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+
+
+@app.post("/activities/{activity_name}/drop")
+def drop_from_activity(activity_name: str, email: str):
+    """Drop a student from an activity"""
+    # Validate activity exists
+    if activity_name not in activities:
+        raise HTTPException(status_code=404, detail="Activity not found")
+
+    # Get the specific activity
+    activity = activities[activity_name]
+
+    # Validate that the student is signed up
+    if email not in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Student is not signed up for this activity")
+
+    # Remove student
+    activity["participants"].remove(email)
+    return {"message": f"Dropped {email} from {activity_name}"}
