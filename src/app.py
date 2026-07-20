@@ -82,6 +82,12 @@ activities = {
         "schedule": "Thursdays, 4:00 PM - 5:30 PM",
         "max_participants": 16,
         "participants": ["noah@mergington.edu"]
+    },
+    "Soccer": {
+        "description": "Competitive soccer practices and matches",
+        "schedule": "Mondays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 18,
+        "participants": ["lucas@mergington.edu", "aiden@mergington.edu"]
     }
 }
 
