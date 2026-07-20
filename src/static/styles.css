@@ -70,6 +70,7 @@ section h3 {
 .activity-card:hover {
   box-shadow: 0 8px 25px rgba(26, 35, 126, 0.25);
   transform: translateY(-2px);
+  background: linear-gradient(135deg, #f5f7ff 0%, #eef0ff 100%);
 }
 
 .activity-card h4 {
