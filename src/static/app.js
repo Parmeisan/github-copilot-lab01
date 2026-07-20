@@ -1,47 +1,93 @@
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
   const actionsContent = document.getElementById("actions-content");
+  const dayFilterInputs = document.querySelectorAll('.day-filter-input');
   let allActivities = {};
   let selectedActivity = null;
   let studentEmail = null;
 
-  // Function to fetch activities from API
+  function getSelectedDays() {
+    return new Set(
+      Array.from(dayFilterInputs)
+        .filter((input) => input.checked)
+        .map((input) => input.value)
+    );
+  }
+
+  function extractScheduleDays(schedule) {
+    const matches = schedule.match(/\b(Monday|Tuesday|Wednesday|Thursday|Friday)s?\b/gi);
+    if (!matches) return [];
+    return Array.from(
+      new Set(
+        matches.map((match) => {
+          const cleaned = match.replace(/s$/i, '');
+          return cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
+        })
+      )
+    );
+  }
+
+  function formatScheduleDisplay(schedule, selectedDays) {
+    return schedule.replace(/\b(Monday|Tuesday|Wednesday|Thursday|Friday)s?\b/gi, (match) => {
+      const cleaned = match.replace(/s$/i, '');
+      const normalized = cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
+      const isSelected = selectedDays.has(normalized);
+      return `<span class="schedule-day${isSelected ? '' : ' disabled'}">${match}</span>`;
+    });
+  }
+
+  function shouldShowActivity(scheduleDays, selectedDays) {
+    return scheduleDays.some((day) => selectedDays.has(day));
+  }
+
+  function renderActivities() {
+    const selectedDays = getSelectedDays();
+    activitiesList.innerHTML = '';
+
+    const visibleActivities = Object.entries(allActivities).filter(([, details]) => {
+      const scheduleDays = extractScheduleDays(details.schedule);
+      return shouldShowActivity(scheduleDays, selectedDays);
+    });
+
+    if (visibleActivities.length === 0) {
+      activitiesList.innerHTML = '<p>No activities match the selected days.</p>';
+      return;
+    }
+
+    visibleActivities.forEach(([name, details]) => {
+      const activityCard = document.createElement('div');
+      activityCard.className = 'activity-card';
+      activityCard.style.cursor = 'pointer';
+
+      const spotsLeft = details.max_participants - details.participants.length;
+      const formattedSchedule = formatScheduleDisplay(details.schedule, selectedDays);
+
+      activityCard.innerHTML = `
+        <div class="activity-card-header">
+          <h4>${name}</h4>
+          <span class="activity-meta">Spots Left: ${spotsLeft}</span>
+        </div>
+        <p>${details.description}</p>
+        <p><strong>Schedule:</strong> ${formattedSchedule}</p>
+      `;
+
+      activityCard.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        selectActivity(name);
+      });
+
+      activitiesList.appendChild(activityCard);
+    });
+  }
+
   async function fetchActivities() {
     try {
-      const response = await fetch("/activities");
+      const response = await fetch('/activities');
       allActivities = await response.json();
-
-      // Clear loading message
-      activitiesList.innerHTML = "";
-
-      // Populate activities list
-      Object.entries(allActivities).forEach(([name, details]) => {
-        const activityCard = document.createElement("div");
-        activityCard.className = "activity-card";
-        activityCard.style.cursor = "pointer";
-
-        const spotsLeft = details.max_participants - details.participants.length;
-
-        activityCard.innerHTML = `
-          <div class="activity-card-header">
-            <h4>${name}</h4>
-            <span class="activity-meta">Spots Left: ${spotsLeft}</span>
-          </div>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-        `;
-
-        // Add click handler to select activity
-        activityCard.addEventListener("click", () => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          selectActivity(name);
-        });
-
-        activitiesList.appendChild(activityCard);
-      });
+      renderActivities();
     } catch (error) {
-      activitiesList.innerHTML = "<p>Failed to load activities. Please try again later.</p>";
-      console.error("Error fetching activities:", error);
+      activitiesList.innerHTML = '<p>Failed to load activities. Please try again later.</p>';
+      console.error('Error fetching activities:', error);
     }
   }
 
@@ -190,6 +236,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+
+  // Attach filter event listeners
+  dayFilterInputs.forEach((input) => {
+    input.addEventListener('change', renderActivities);
+  });
 
   // Initialize app
   fetchActivities();
