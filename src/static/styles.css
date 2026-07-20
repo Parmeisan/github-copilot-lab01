@@ -37,17 +37,79 @@ main {
 
 @media (min-width: 768px) {
   main {
-    grid-template-columns: 2fr 1fr;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+  }
+
+  section {
+    max-width: calc(50% - 15px);
   }
 }
 
 section {
   background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
   width: 100%;
   max-width: 500px;
+}
+
+.details-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background-color: #f4f7ff;
+}
+
+.detail-label {
+  font-weight: 700;
+  color: #1a237e;
+  min-width: 100px;
+}
+
+.detail-value {
+  color: #444;
+  flex: 1;
+}
+
+.detail-heading {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.participants-list {
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+  color: #444;
+}
+
+.participants-list li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.activity-card p {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.activity-card h4 {
+  margin-bottom: 12px;
+  color: #0d47a1;
+  font-size: 20px;
 }
 
 section h3 {

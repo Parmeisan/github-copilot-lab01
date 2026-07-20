@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Add click handler to select activity
         activityCard.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
           selectActivity(name);
         });
 
@@ -48,15 +49,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const activity = allActivities[activityName];
     const isRegistered = studentEmail && activity.participants.includes(studentEmail);
 
-    let actionsHTML = `<h4 style="color: #0066cc; margin-bottom: 20px;">${activityName}</h4>
-      <p>${activity.description}</p>
-      <p><strong>Schedule:</strong> ${activity.schedule}</p>
-      <p><strong>Availability:</strong> ${activity.max_participants - activity.participants.length} spots left</p>
-      <p><strong>Capacity:</strong> ${activity.participants.length}/${activity.max_participants}</p>
-      <p><strong>Participants:</strong></p>
-      <ul>
-        ${activity.participants.length > 0 ? activity.participants.map(p => `<li>${p}</li>`).join('') : `<li>No participants yet</li>`}
-      </ul>`;
+    let actionsHTML = `<div class="details-panel">
+        <div>
+          <h4 style="color: #0066cc; margin-bottom: 8px;">${activityName}</h4>
+          <p style="margin-bottom: 16px; color: #444;">${activity.description}</p>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Schedule</span>
+          <span class="detail-value">${activity.schedule}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Availability</span>
+          <span class="detail-value">${activity.max_participants - activity.participants.length} spots left</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Capacity</span>
+          <span class="detail-value">${activity.participants.length}/${activity.max_participants}</span>
+        </div>
+        <div>
+          <p class="detail-heading">Participants</p>
+          <ul class="participants-list">
+            ${activity.participants.length > 0 ? activity.participants.map(p => `<li>${p}</li>`).join('') : `<li>No participants yet</li>`}
+          </ul>
+        </div>
+      </div>`;
 
     if (!studentEmail) {
       actionsHTML += `
