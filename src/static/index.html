@@ -14,22 +14,24 @@
 
     <main>
       <section id="activities-container">
-        <h3>Available Activities</h3>
-        <div id="day-filter-bar" class="day-filter-bar">
-          <label><input type="checkbox" class="day-filter-input" value="Monday" checked /> Monday</label>
-          <label><input type="checkbox" class="day-filter-input" value="Tuesday" checked /> Tuesday</label>
-          <label><input type="checkbox" class="day-filter-input" value="Wednesday" checked /> Wednesday</label>
-          <label><input type="checkbox" class="day-filter-input" value="Thursday" checked /> Thursday</label>
-          <label><input type="checkbox" class="day-filter-input" value="Friday" checked /> Friday</label>
+        <div class="activities-sidebar-top">
+          <h3 class="sticky-heading">Available Activities</h3>
+          <div id="day-filter-bar" class="day-filter-bar">
+            <label><input type="checkbox" class="day-filter-input" value="Monday" checked /> Monday</label>
+            <label><input type="checkbox" class="day-filter-input" value="Tuesday" checked /> Tuesday</label>
+            <label><input type="checkbox" class="day-filter-input" value="Wednesday" checked /> Wednesday</label>
+            <label><input type="checkbox" class="day-filter-input" value="Thursday" checked /> Thursday</label>
+            <label><input type="checkbox" class="day-filter-input" value="Friday" checked /> Friday</label>
+          </div>
         </div>
-        <div id="activities-list">
+        <div id="activities-list" class="activities-list">
           <!-- Activities will be loaded here -->
           <p>Loading activities...</p>
         </div>
       </section>
 
       <section id="actions-container">
-        <h3>Activity Details</h3>
+        <h3 class="sticky-heading">Activity Details</h3>
         <div id="actions-content">
           <p>Select an activity to get started</p>
         </div>
